@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Solid Objects
+  - Long Grass
   - 
   - 
   - 
@@ -40,4 +40,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 370043121
+    locked: 0
+  - name: Foreground
+    uniqueID: 703104633
+    locked: 0
+  - name: Player
+    uniqueID: 982341255
     locked: 0

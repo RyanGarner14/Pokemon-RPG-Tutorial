@@ -6,6 +6,7 @@ using UnityEngine;
 public class PokemonBase : ScriptableObject
 {
     [SerializeField] string name;
+
     [TextArea]
     [SerializeField] string description;
 
@@ -15,12 +16,15 @@ public class PokemonBase : ScriptableObject
     [SerializeField] PokemonType type1;
     [SerializeField] PokemonType type2;
 
+    // Base Stats
     [SerializeField] int maxHp;
     [SerializeField] int attack;
     [SerializeField] int defense;
     [SerializeField] int spAttack;
     [SerializeField] int spDefense;
     [SerializeField] int speed;
+
+    [SerializeField] List<LearnableMove> learnableMoves;
 
     // Properties //
 
@@ -73,6 +77,26 @@ public class PokemonBase : ScriptableObject
         get { return speed; }
     }
 
+    public List<LearnableMove> LearnableMoves
+    {
+        get { return learnableMoves; }
+    }
+}
+
+[System.Serializable]
+public class LearnableMove
+{
+    [SerializeField] MoveBase moveBase;
+    [SerializeField] int level;
+
+    public MoveBase Base
+    {
+        get { return moveBase; }
+    }
+    public int Level
+    {
+        get { return level; }
+    }
 }
 
 public enum PokemonType
@@ -93,4 +117,41 @@ public enum PokemonType
     Rock,
     Ghost,
     Dragon
+}
+
+public class TypeChart
+{
+    static float[][] chart =
+    {
+        //                        NOR FIR   WAT   ELE   GRA   ICE   FIG   POI   GRO   FLY   PSY   BUG   ROC   GHO   DRA   DAR   STE   FAI
+        /*NOR*/     new float[] { 1f, 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 0.5f, 0   , 1f  , 1f  , 0.5f, 1f   },
+        /*FIR*/     new float[] { 1f, 0.5f, 0.5f, 1f  , 2f  , 2f  , 1f  , 1f  , 1f  , 1f  , 1f  , 2f  , 0.5f, 1f  , 0.5f, 1f  , 2f  , 1f   },
+        /*WAT*/     new float[] { 1f, 2f  , 0.5f, 1f  , 0.5f, 1f  , 1f  , 1f  , 2f  , 1f  , 1f  , 1f  , 2f  , 1f  , 0.5f, 1f  , 1f  , 1f   },
+        /*ELE*/     new float[] { 1f, 1f  , 2f  , 0.5f, 0.5f, 1f  , 1f  , 1f  , 0   , 2f  , 1f  , 1f  , 1f  , 1f  , 0.5f, 1f  , 1f  , 1f   },
+        /*GRA*/     new float[] { 1f, 0.5f, 2f  , 1f  , 0.5f, 1f  , 1f  , 0.5f, 2f  , 0.5f, 1f  , 0.5f, 2f  , 1f  , 0.5f, 1f  , 0.5f, 1f   },
+        /*ICE*/     new float[] { 1f, 0.5f, 0.5f, 1f  , 2f  , 0.5f, 1f  , 1f  , 2f  , 2f  , 1f  , 1f  , 1f  , 1f  , 2f  , 1f  , 0.5f, 1f   },
+        /*FIG*/     new float[] { 2f, 1f  , 1f  , 1f  , 1f  , 2f  , 1f  , 0.5f, 1f  , 0.5f, 0.5f, 0.5f, 2f  , 0   , 1f  , 2f  , 2f  , 0.5f },
+        /*POI*/     new float[] { 1f, 1f  , 1f  , 1f  , 2f  , 1f  , 1f  , 0.5f, 0.5f, 1f  , 1f  , 1f  , 0.5f, 0.5f, 1f  , 1f  , 0   , 2f   },
+        /*GRO*/     new float[] { 1f, 2f  , 1f  , 2f  , 0.5f, 1f  , 1f  , 2f  , 1f  , 0   , 1f  , 0.5f, 2f  , 1f  , 1f  , 1f  , 2f  , 1f   },
+        /*FLY*/     new float[] { 1f, 1f  , 1f  , 0.5f, 2f  , 1f  , 2f  , 1f  , 1f  , 1f  , 1f  , 2f  , 0.5f, 1f  , 1f  , 1f  , 0.5f, 1f   },
+        /*PSY*/     new float[] { 1f, 1f  , 1f  , 1f  , 1f  , 1f  , 2f  , 2f  , 1f  , 1f  , 0.5f, 1f  , 1f  , 1f  , 1f  , 0f  , 0.5f, 1f   },
+        /*BUG*/     new float[] { 1f, 0.5f, 1f  , 1f  , 2f  , 1f  , 0.5f, 0.5f, 1f  , 0.5f, 2f  , 1f  , 1f  , 0.5f, 1f  , 2f  , 0.5f, 0.5f },
+        /*ROC*/     new float[] { 1f, 2f  , 1f  , 1f  , 1f  , 2f  , 0.5f, 1f  , 0.5f, 2f  , 1f  , 2f  , 1f  , 1f  , 1f  , 1f  , 0.5f, 1f   },
+        /*GHO*/     new float[] { 0f, 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 2f  , 1f  , 1f  , 2f  , 1f  , 0.5f, 1f  , 1f   },
+        /*DRA*/     new float[] { 1f, 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 2f  , 1f  , 0.5f, 0    },
+        /*DAR*/     new float[] { 1f, 1f  , 1f  , 1f  , 1f  , 1f  , 0.5f, 1f  , 1f  , 1f  , 2f  , 1f  , 1f  , 2f  , 1f  , 0.5f, 1f  , 0.5f },
+        /*STE*/     new float[] { 1f, 0.5f, 0.5f, 0.5f, 1f  , 2f  , 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 2f  , 1f  , 1f  , 1f  , 0.5f, 2f   },
+        /*FAI*/     new float[] { 1f, 0.5f, 1f  , 1f  , 1f  , 1f  , 2f  , 0.5f, 1f  , 1f  , 1f  , 1f  , 1f  , 1f  , 2f  , 2f  , 0.5f, 1f   },
+    };
+
+    public static float getEffectiveness(PokemonType attackType, PokemonType defenseType)
+    {
+        if(attackType == PokemonType.None || defenseType == PokemonType.None)
+            return 1;
+
+        int row = (int)attackType - 1;
+        int col = (int)defenseType - 1;
+
+        return chart[row][col];
+    }
 }

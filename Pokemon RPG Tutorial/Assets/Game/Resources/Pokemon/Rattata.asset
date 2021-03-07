@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08173e77843afd642a2b6110a91b9713, type: 3}
+  m_Name: Rattata
+  m_EditorClassIdentifier: 
+  name: Rattata
+  description: 
+  frontSprite: {fileID: 21300000, guid: 7f6be4c1ddf8279498f69461d5acd189, type: 3}
+  backSprite: {fileID: 21300000, guid: 2475d5610b3f30942a4182b9cee139e4, type: 3}
+  type1: 1
+  type2: 0
+  maxHp: 30
+  attack: 56
+  defense: 35
+  spAttack: 25
+  spDefense: 35
+  speed: 72
+  learnableMoves:
+  - moveBase: {fileID: 11400000, guid: e43f091496ec2db4daee45a525477df1, type: 2}
+    level: 1

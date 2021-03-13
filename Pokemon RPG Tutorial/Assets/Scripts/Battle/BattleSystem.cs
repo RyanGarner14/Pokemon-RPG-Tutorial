@@ -394,6 +394,11 @@ public class BattleSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            // Ensure Current Move PP is greater than 0
+            var move = playerUnit.Pokemon.Moves[currentMove];
+            if (move.PP <= 0) return;
+
+            // Selected move and continue to play RunTurns
             dialogBox.EnableMoveSelector(false);
             dialogBox.EnableDialogText(true);
             StartCoroutine(RunTurns(BattleAction.Move));

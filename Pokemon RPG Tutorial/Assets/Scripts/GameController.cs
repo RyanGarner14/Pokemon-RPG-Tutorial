@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum GameState {  Freeroam, Battle, Dialog }
+public enum GameState {  Freeroam, Battle, Dialog, Cutscene }
 
 public class GameController : MonoBehaviour
 {
@@ -12,15 +12,29 @@ public class GameController : MonoBehaviour
 
     GameState state;
 
+    public static GameController Instance { get; private set; }
+
     private void Awake()
     {
+        Instance = this;
         ConditionsDB.Init();
+
     }
 
     private void Start()
     {
         playerController.OnEncountered += StartBattle;
         battleSystem.OnBattleOver += EndBattle;
+
+        playerController.OnEnterTrainerView += (Collider2D trainerCollider) =>
+        {
+            var trainer = trainerCollider.GetComponentInParent<TrainerController>();
+            if(trainer != null)
+            {
+                state = GameState.Cutscene;
+                StartCoroutine(trainer.TriggerTrainerBattle(playerController));
+            }
+        };
 
         DialogManager.Instance.OnShowDialog += () =>
         {
@@ -43,6 +57,17 @@ public class GameController : MonoBehaviour
         var wildPokemon = FindObjectOfType<MapArea>().GetComponent<MapArea>().GetRandomWildPokemon(); // Finds map area component, and calls the random pokemon function
 
         battleSystem.StartBattle(playerParty, wildPokemon);
+    }
+    public void StartTrainerBattle(TrainerController trainer)
+    {
+        state = GameState.Battle;
+        battleSystem.gameObject.SetActive(true);
+        worldCamera.gameObject.SetActive(false);
+
+        var playerParty = playerController.GetComponent<PokemonParty>(); // Accesses the pokemon party object on the player controller
+        var trainerParty = trainer.GetComponent<PokemonParty>(); // Takes pokemon party from the trainer that is initiating the battle
+
+        battleSystem.StartTrainerBattle(playerParty, trainerParty);
     }
 
     void EndBattle(bool won)
